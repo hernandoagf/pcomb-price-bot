@@ -1,18 +1,25 @@
-const fetch = require('node-fetch')
+const gql = require('graphql-tag')
+const { GraphQLWrapper } = require('@aragon/connect-thegraph')
 
-const fetchTokens = async () => {
-  const tokens = await (await fetch('https://api.coingecko.com/api/v3/coins/list')).json()
-  return tokens
-}
+const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/1hive/honeyfarm-xdai'
 
-exports.getCoingeckoCircSupply = async (botTokenSymbol) => {
-  const tokens = await fetchTokens()
+const SUPPLY_QUERY = gql`
+  query {
+    hsfTokens {
+      totalHsfClaimed,
+      totalHsfHarvested
+    }
+  }
+`
 
-  const tokenId = tokens.find((token) => token.symbol === botTokenSymbol.toLowerCase()).id
+exports.getCircSupply = async () => {
+  const graphqlClient = new GraphQLWrapper(SUBGRAPH_URL)
+  const result = await graphqlClient.performQuery(SUPPLY_QUERY)
 
-  const tokenData = await (await fetch(`https://api.coingecko.com/api/v3/coins/${tokenId}`)).json()
+  if (!result.data) return undefined
 
-  const circSupply = tokenData.market_data.circulating_supply
+  const totalHsfClaimed = +result.data.hsfTokens[0].totalHsfClaimed / 1e18
+  const totalHsfHarvested = +result.data.hsfTokens[0].totalHsfHarvested / 1e18
 
-  return circSupply
+  return totalHsfClaimed + totalHsfHarvested
 }

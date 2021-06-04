@@ -1,7 +1,7 @@
 const { Client } = require('discord.js')
 const dotenv = require('dotenv')
 const { getTokenPrice, getTokenSymbol } = require('./fetchData')
-const { getCoingeckoCircSupply } = require('./fetchMarketCap')
+const { getCircSupply } = require('./fetchMarketCap')
 
 const { numberWithCommas } = require('./utils')
 
@@ -16,7 +16,7 @@ client.on('ready', () => console.log(`Bot successfully started as ${client.user.
 client.setInterval(async () => {
   const price = await getTokenPrice()
   const symbol = await getTokenSymbol()
-  const circSupply = await getCoingeckoCircSupply(symbol)
+  const circSupply = await getCircSupply()
 
   client.guilds.cache.forEach(async (guild) => {
     const botMember = guild.me
