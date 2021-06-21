@@ -7,7 +7,8 @@ const SUPPLY_QUERY = gql`
   query {
     hsfTokens {
       totalHsfClaimed,
-      totalHsfHarvested
+      totalHsfHarvested,
+      totalHsfBurned
     }
   }
 `
@@ -20,6 +21,7 @@ exports.getCircSupply = async () => {
 
   const totalHsfClaimed = +result.data.hsfTokens[0].totalHsfClaimed / 1e18
   const totalHsfHarvested = +result.data.hsfTokens[0].totalHsfHarvested / 1e18
+  const totalHsfBurned = +result.data.hsfTokens[0].totalHsfBurned / 1e18
 
-  return totalHsfClaimed + totalHsfHarvested
+  return totalHsfClaimed + totalHsfHarvested - totalHsfBurned
 }
