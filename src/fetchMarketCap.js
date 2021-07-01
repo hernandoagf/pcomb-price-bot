@@ -1,7 +1,7 @@
 const gql = require('graphql-tag')
 const { GraphQLWrapper } = require('@aragon/connect-thegraph')
 
-const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/1hive/honeyfarm-xdai'
+const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/1hive/honeyfarm-polygon'
 
 const SUPPLY_QUERY = gql`
   query {
