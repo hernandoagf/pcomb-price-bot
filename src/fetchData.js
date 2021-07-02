@@ -10,7 +10,7 @@ const PRICE_QUERY = gql`
   query {
     token(id: "${process.env.TOKEN_ID}") {
       symbol
-      tokenDayData {
+      tokenDayData(first: 1, orderBy: date, orderDirection: desc) {
         priceUSD
       }
     }
